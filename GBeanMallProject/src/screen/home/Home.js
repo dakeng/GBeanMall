@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, Dimensions} from 'react-native';
-import styles from './modules/styles';
+import styles from './../../common/modules/styles';
 import Swiper from 'react-native-swiper';
+import GoodInfoCard from './component/GoodInfoCard';
 
 export default class HomeScreen extends Component{
     static navigationOptions = {
@@ -32,7 +33,7 @@ export default class HomeScreen extends Component{
     render(){
         if(this.state.visibleSwiper){
             return(
-                <ScrollView>
+                <ScrollView style={styles.container}>
                     <Swiper 
                         style={homeStyle.wrapper}
                         autoplay={true}
@@ -48,10 +49,7 @@ export default class HomeScreen extends Component{
                             <Text style={homeStyle.text}>three</Text>
                         </View>
                     </Swiper>
-                    <Image 
-                        source={{uri: 'http://tp.lingyu.me/wp-content/uploads/2016/01/4V6GIKLIDIVBAW6MFT.jpg'}}
-                        style={{width: 400, height: 400}}    
-                    />    
+                    <GoodInfoCard/>
                 </ScrollView>
             );
         }else{
