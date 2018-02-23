@@ -7,7 +7,7 @@ export default class MineScreen extends Component{
         tabBarLabel: '我的',
         tabBarIcon: ({tintColor}) => (
             <Image 
-                source={require('./../img/account.png')}
+                source={require('./../../img/account.png')}
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),

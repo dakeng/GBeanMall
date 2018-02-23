@@ -9,7 +9,7 @@ export default class HomeScreen extends Component{
         tabBarLabel: '首页',
         tabBarIcon: ({tintColor}) => (
             <Image 
-                source={require('./../img/all.png')}
+                source={require('./../../img/all.png')}
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),

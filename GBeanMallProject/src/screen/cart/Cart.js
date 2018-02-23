@@ -7,7 +7,7 @@ export default class CartScreen extends Component{
         tabBarLabel: '购物车',
         tabBarIcon: ({tintColor}) => (
             <Image 
-                source={require('./../img/cart.png')}
+                source={require('./../../img/cart.png')}
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
