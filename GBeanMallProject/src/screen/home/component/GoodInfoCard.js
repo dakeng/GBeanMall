@@ -10,10 +10,10 @@ export default class GoodInfoCard extends Component{
     render (){
         return (
             <View style={styles.container}>
-                <Image style={styles.goodImg} source={{uri: 'https://shop.r10s.jp/motherskitchen/cabinet/02613141/imgrc0072707396.jpg'}}/>
+                <Image style={styles.goodImg} source={{uri: this.props.data.commodity_imgs[0]}}/>
                 <View style={styles.info}>
-                    <Text style={styles.title}>商品名称</Text>
-                    <Text style={styles.des}>商品价格</Text>
+                    <Text style={styles.title}>{this.props.data.commodity_name}</Text>
+                    <Text style={styles.des}><Text style={styles.unit}>￥</Text>{this.props.data.commodity_price}</Text>
                 </View>
             </View>
         );
@@ -23,7 +23,7 @@ export default class GoodInfoCard extends Component{
 const deviceWidth = Dimensions.get('window').width;
 const styles = {
     container: {
-        width: deviceWidth/2.1,
+        width: deviceWidth/2.05,
         backgroundColor: '#fff',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -31,8 +31,8 @@ const styles = {
         alignItems: 'center',
     },
     goodImg: {
-        width: deviceWidth/2.1,
-        height: deviceWidth/2.1,
+        width: deviceWidth/2.05,
+        height: deviceWidth/2.05,
     },
     info: {
         flexDirection: 'column',
@@ -48,4 +48,7 @@ const styles = {
         fontSize: 14,
         color: 'red',
     },
+    unit: {
+        fontSize: 8,
+    }
 }

@@ -2,7 +2,24 @@ import React, {Component} from 'react';
 import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import styles from './../../common/modules/styles';
 import Swiper from 'react-native-swiper';
+
+import request from './modules/request';
 import GoodInfoCard from './component/GoodInfoCard';
+
+const icon = [
+    {
+        source: require('./../../img/task.png'),
+        text: '任务'
+    },
+    {
+        source: require('./../../img/glodenBean.png'),
+        text: '金豆'
+    },
+    {
+        source: require('./../../img/search.png'),
+        text: '搜索'
+    }
+];
 
 export default class HomeScreen extends Component{
     static navigationOptions = {
@@ -18,8 +35,22 @@ export default class HomeScreen extends Component{
     constructor(props){
         super(props);
         this.state = {
-            visibleSwiper: false
+            visibleSwiper: false,
+            data: []
         }
+    }
+
+    loadData = (_data) => {
+        this.setState({
+            data: _data
+        });
+    }
+
+    componentWillMount(){
+        request({
+            method: 'get',
+            url: 'http://192.168.0.5:4000/commodity'
+        }, this.loadData);
     }
 
     componentDidMount(){
@@ -36,7 +67,6 @@ export default class HomeScreen extends Component{
                 <ScrollView style={styles.container}>
                     <Swiper 
                         style={homeStyle.wrapper}
-                        autoplay={true}
                         autoplayTimeout={4}    
                     >
                         <View style={[homeStyle.item, homeStyle.slide1]}>
@@ -49,7 +79,30 @@ export default class HomeScreen extends Component{
                             <Text style={homeStyle.text}>three</Text>
                         </View>
                     </Swiper>
-                    <GoodInfoCard/>
+                    <View style={homeStyle.iconContainer}>
+                        {
+                            icon && icon.length > 0 &&
+                            icon.map((item, index) => {
+                                return (
+                                    <View style={homeStyle.icon} key={index}>
+                                        <Image source={item.source} style={homeStyle.iconImg}/>
+                                        <Text style={homeStyle.iconText}>{item.text}</Text>
+                                    </View> 
+                                );
+                            }) 
+                        }
+                    </View>
+                    <View style={homeStyle.goodsContainer}>
+                    {
+                        this.state.data && this.state.data.length > 0 && 
+                        this.state.data.map((item, index) => {
+                            /* console.log(item); */
+                            return (
+                                <GoodInfoCard data={item} key={item._id}/>
+                            );
+                        })
+                    }
+                    </View>
                 </ScrollView>
             );
         }else{
@@ -69,6 +122,26 @@ const homeStyle = StyleSheet.create({
         width: deviceWidth,
         height: 200
     },
+    iconContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: '#FFF',
+    },
+    icon: {
+        width: deviceWidth/8,
+        height: deviceWidth/6,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+    },
+    iconText: {
+        fontSize: 12,
+    },
+    iconImg: {
+        width: deviceWidth/10,
+        height: deviceWidth/10,
+    },
     item: {
         height: 200,
         justifyContent: 'center',
@@ -87,5 +160,9 @@ const homeStyle = StyleSheet.create({
         color: '#fff',
         fontSize: 30,
         fontWeight: 'bold',
+    },
+    goodsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     }
 })
