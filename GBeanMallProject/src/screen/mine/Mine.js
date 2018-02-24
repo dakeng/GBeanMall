@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Text, Image} from 'react-native';
+import {Text, Image, Button} from 'react-native';
 import styles from './../../common/modules/styles';
 
-export default class MineScreen extends Component{
+export default class CartScreen extends Component{
     static navigationOptions = {
         tabBarLabel: '我的',
         tabBarIcon: ({tintColor}) => (

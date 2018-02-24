@@ -46,6 +46,10 @@ export default class HomeScreen extends Component{
         });
     }
 
+    jumpPage = (_title) => {
+        this.props.navigation.navigate('CommodityDetail', {title: _title});
+    }
+
     componentWillMount(){
         request({
             method: 'get',
@@ -98,7 +102,11 @@ export default class HomeScreen extends Component{
                         this.state.data.map((item, index) => {
                             /* console.log(item); */
                             return (
-                                <GoodInfoCard data={item} key={item._id}/>
+                                <GoodInfoCard 
+                                    data={item} 
+                                    key={item._id}
+                                    jumpPage={this.jumpPage}
+                                />
                             );
                         })
                     }
@@ -107,9 +115,7 @@ export default class HomeScreen extends Component{
             );
         }else{
             return (
-                <View>
-                    <Text>ceshi</Text>
-                </View>
+                <View></View>
             );
         }
         

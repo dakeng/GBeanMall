@@ -1,8 +1,8 @@
 import React from 'react';
 import {StackNavigator,TabNavigator,TabBarBottom} from 'react-navigation';
-import HomeScreen from './screen/home/Home';
-import CartScreen from './screen/cart/Cart';
-import MineScreen from './screen/mine/Mine';
+import HomeScreen from './../screen/home/Home';
+import CartScreen from './../screen/cart/Cart';
+import MineScreen from './../screen/mine/Mine';
 
 const Tab = TabNavigator(
     {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Image, Text, Dimensions} from 'react-native';
+import {View, Image, Text, Dimensions, TouchableHighlight} from 'react-native';
 
 export default class GoodInfoCard extends Component{
     constructor(props){
@@ -9,13 +9,15 @@ export default class GoodInfoCard extends Component{
 
     render (){
         return (
-            <View style={styles.container}>
-                <Image style={styles.goodImg} source={{uri: this.props.data.commodity_imgs[0]}}/>
-                <View style={styles.info}>
-                    <Text style={styles.title}>{this.props.data.commodity_name}</Text>
-                    <Text style={styles.des}><Text style={styles.unit}>￥</Text>{this.props.data.commodity_price}</Text>
+            <TouchableHighlight onPress={() => this.props.jumpPage(this.props.data.commodity_name)}>
+                <View style={styles.container}>
+                    <Image style={styles.goodImg} source={{uri: this.props.data.commodity_imgs[0]}}/>
+                    <View style={styles.info}>
+                        <Text style={styles.title}>{this.props.data.commodity_name}</Text>
+                        <Text style={styles.des}><Text style={styles.unit}>￥</Text>{this.props.data.commodity_price}</Text>
+                    </View>
                 </View>
-            </View>
+            </TouchableHighlight>
         );
     }
 }
