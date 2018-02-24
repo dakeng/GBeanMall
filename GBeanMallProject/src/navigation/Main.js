@@ -7,9 +7,6 @@ const Main = StackNavigator(
     {
         Tab: {
             screen: Tab,
-            navigationOptions: {
-                header: null,
-            }
         },
         CommodityDetail: {
             screen: CommodityDetail,

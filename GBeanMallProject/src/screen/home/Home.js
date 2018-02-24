@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, Dimensions} from 'react-native';
-import styles from './../../common/modules/styles';
+import {styles} from './../../common/modules/styles';
 import Swiper from 'react-native-swiper';
 
 import request from './modules/request';
@@ -30,6 +30,7 @@ export default class HomeScreen extends Component{
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+        header: null,
     };
 
     constructor(props){

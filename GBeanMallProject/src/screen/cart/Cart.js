@@ -1,13 +1,20 @@
 import React, {Component} from 'react';
-import {Text, Image, Button} from 'react-native';
-import styles from './../../common/modules/styles';
+import {View, Text, Image, Button} from 'react-native';
+import {styles, deviceWidth} from './../../common/modules/styles';
 
 class CartTitle extends Component {
     render() {
         return (
-            <View>
-                <Text>购物车</Text>
-                <image source={require('./../../img/position.png')} />
+            <View 
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: deviceWidth,
+                }}
+            >
+                <Text style={{fontSize: 20, color: '#333'}}>购物车</Text>
+                <Image style={{width: 18, height: 18}} source={require('./../../img/position.png')} />
             </View>
         );
     }
@@ -23,13 +30,9 @@ export default class CartScreen extends Component{
             />
         ),
         headerTitle: <CartTitle />,
-        headerRight: (
-            <Button
-                onPress={() => alert('This is a button!')}
-                title="Info"
-                color="#fff"
-            />
-        ),
+        headerTitleStyle: {
+            alignSelt: 'center',
+        }
     };
 
     render(){

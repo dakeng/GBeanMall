@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text, Image, Button} from 'react-native';
-import styles from './../../common/modules/styles';
+import {styles} from './../../common/modules/styles';
 
 export default class CartScreen extends Component{
     static navigationOptions = {
@@ -11,6 +11,7 @@ export default class CartScreen extends Component{
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+        header: null,
     };
 
     render(){

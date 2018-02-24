@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 
+const deviceWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#ebebeb',
@@ -10,4 +11,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default styles;
+export {styles, deviceWidth};
