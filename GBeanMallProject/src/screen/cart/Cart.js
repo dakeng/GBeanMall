@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Image, Button} from 'react-native';
+import {View, Text, Image, Button, StyleSheet} from 'react-native';
 import {styles, deviceWidth} from './../../common/modules/styles';
 
 class CartTitle extends Component {
@@ -29,15 +29,31 @@ export default class CartScreen extends Component{
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
+        headerStyle: {
+            borderBottomColor: '#dcdcdc',
+            borderBottomWidth: 0.5,
+            elevation: 0,
+        },
         headerTitle: <CartTitle />,
-        headerTitleStyle: {
-            alignSelt: 'center',
-        }
     };
 
     render(){
         return(
-            <Text>Cart</Text>
+            <View style={CartStyles.container}>
+                <Text>您的购物车空空如也~</Text>
+            </View>
         )
     }
 }
+
+const CartStyles = StyleSheet.create({
+    container: {
+        backgroundColor: '#fff',
+        padding: 28,
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    textCenter: {
+        textAlign: 'center',
+    }
+});

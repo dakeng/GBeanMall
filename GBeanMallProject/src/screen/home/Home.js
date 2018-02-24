@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, Dimensions} from 'react-native';
-import {styles} from './../../common/modules/styles';
+import {styles, deviceWidth} from './../../common/modules/styles';
 import Swiper from 'react-native-swiper';
 
 import request from './modules/request';
@@ -123,7 +123,6 @@ export default class HomeScreen extends Component{
     }
 }
 
-const deviceWidth = Dimensions.get('window').width;
 const homeStyle = StyleSheet.create({
     wrapper: {
         width: deviceWidth,
@@ -146,8 +145,8 @@ const homeStyle = StyleSheet.create({
         fontSize: 12,
     },
     iconImg: {
-        width: deviceWidth/10,
-        height: deviceWidth/10,
+        width: deviceWidth/12,
+        height: deviceWidth/12,
     },
     item: {
         height: 200,
@@ -170,6 +169,7 @@ const homeStyle = StyleSheet.create({
     },
     goodsContainer: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
     }
 })
