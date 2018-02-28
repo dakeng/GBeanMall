@@ -2,6 +2,23 @@ import React, {Component} from 'react';
 import {Text, Image, Button, View, StyleSheet, TouchableHighlight} from 'react-native';
 import {styles, deviceWidth} from './../../common/modules/styles';
 
+class MineTitle extends Component {
+    render() {
+        return (
+            <View 
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: deviceWidth,
+                }}
+            >
+                <Text style={{fontSize: 20, color: '#fff'}}>我</Text>
+            </View>
+        );
+    }
+}
+
 export default class MineScreen extends Component{
     static navigationOptions = {
         tabBarLabel: '我的',
@@ -11,18 +28,25 @@ export default class MineScreen extends Component{
                 style={[styles.icon, {tintColor: tintColor}]}
             />
         ),
-        header: null,
+        headerStyle: {
+            elevation: 0,
+            backgroundColor: '#e94f37',
+        },
+        headerTitle: <MineTitle/>
     };
 
     render(){
         return(
             <View>
-                <View style={MineStyles.accountContainer}>
-                    <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
-                    <View style={MineStyles.signInBtn}>
-                        <Button title="登录" onPress={e => console.log('点击登录')} color='#e94f37'/>
+                <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp')}>
+                    <View style={MineStyles.accountContainer}>
+                        <View style={MineStyles.leftContainer}>
+                            <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
+                            <Text style={MineStyles.btnText}>登录/注册</Text>
+                        </View>
+                        <Image source={require('./../../img/enter.png')} style={MineStyles.enterIcon}/>
                     </View>
-                </View>
+                </TouchableHighlight>
             </View>
         );
     }
@@ -30,23 +54,38 @@ export default class MineScreen extends Component{
 
 const MineStyles = StyleSheet.create({
     accountContainer: {
-        paddingTop: 36,
-        paddingBottom: 24,
         backgroundColor: '#fff',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: "space-between",
         alignItems: 'center',
         backgroundColor: '#fff',
+        marginTop: 8,
+    },
+    leftContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     headPic: {
+        margin: 10,
         width: deviceWidth/6,
         height: deviceWidth/6,
     },
     signInBtn: {
         width: deviceWidth/4,
-        margin: 16,
+        marginRight: 10,
+    },
+    btnContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     btnText: {
-        color: '#fff',
-    }
+        color: '#434343',
+        fontSize: 18,
+    },
+    enterIcon: {
+        width: 22,
+        height: 22,
+        margin: 10,
+    },
 });
