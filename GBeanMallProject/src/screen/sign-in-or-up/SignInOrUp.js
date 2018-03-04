@@ -11,15 +11,29 @@ class Header extends Component {
 }
 
 export default class SignInOrUp extends Component {
-    static navigationOptions = {
-        headerStyle: {
-            backgroundColor: '#e94f37',
-            elevation: 0,
-        },
-        headerTitleStyle: {
-            fontSize: 20,
-        },
-        headerTintColor: '#fff',
+    static navigationOptions = ({navigation}) => {
+       return {
+            signIn: navigation.state.params.signIn,
+            headerStyle: {
+                backgroundColor: '#e94f37',
+                elevation: 0,
+            },
+            headerTitleStyle: {
+                fontSize: 20,
+            },
+            headerTintColor: '#fff',
+        };
+    }
+
+    setStyle = () => {
+        let defaultStyle = [pageStyles.input];
+        if(this.props.navigation.state.params.signIn){
+            defaultStyle.push(pageStyles.pwInput);
+        }else{
+            defaultStyle.push(pageStyles.middleInput);
+        }
+        //console.log(defaultStyle);
+        return defaultStyle;
     }
 
     constructor(props){
@@ -27,10 +41,12 @@ export default class SignInOrUp extends Component {
         this.state = {
             username: '',
             password: '',
+            ensurePassword: '',
         }
     }
 
     render(){
+        //console.log(this.props);
         return (
             <View style={[pageStyles.container]}>
                 <View style={[pageStyles.inputContainer, styles.verticalAlign]}>
@@ -43,23 +59,44 @@ export default class SignInOrUp extends Component {
                     />
                     <TextInput
                         secureTextEntry={true}
-                        style={[pageStyles.input, pageStyles.pwInput]}
+                        style={this.setStyle()}
                         placeholder="密码"
                         placeholderTextColor="#bcbcbc"
                         underlineColorAndroid={'transparent'}
                         onChangeText={text => this.setState({password: text})}
                     />
-                    <TouchableOpacity style={[pageStyles.btn, styles.verticalAlign]}>
-                        <Text style={pageStyles.btnText}>登录</Text>
-                    </TouchableOpacity>
-                    <View style={[styles.spaceBetween, pageStyles.subContainer]}>
-                        <TouchableOpacity>
-                            <Text style={[pageStyles.subText, pageStyles.leftText]}>忘记密码？</Text>
+                    {
+                        !this.props.navigation.state.params.signIn &&
+                        <TextInput
+                            secureTextEntry={true}
+                            style={[pageStyles.input, pageStyles.pwInput]}
+                            placeholder="确认密码"
+                            placeholderTextColor="#bcbcbc"
+                            underlineColorAndroid={'transparent'}
+                            onChangeText={text => this.setState({ensurePassword: text})}
+                        />
+                    }
+                    {
+                        this.props.navigation.state.params.signIn ?
+                        <TouchableOpacity
+                            style={[pageStyles.btn, styles.verticalAlign]}>
+                            <Text style={pageStyles.btnText}>登录</Text>
+                        </TouchableOpacity> : 
+                        <TouchableOpacity style={[pageStyles.btn, styles.verticalAlign]}>
+                            <Text style={pageStyles.btnText}>注册</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
-                            <Text style={[pageStyles.subText]}>注册账户</Text>
-                        </TouchableOpacity>
-                    </View>
+                    }
+                    {
+                        this.props.navigation.state.params.signIn && 
+                        <View style={[styles.spaceBetween, pageStyles.subContainer]}>
+                            <TouchableOpacity>
+                                <Text style={[pageStyles.subText, pageStyles.leftText]}>忘记密码？</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={e => this.props.navigation.navigate('SignInOrUp', {signIn: false})}>
+                                <Text style={[pageStyles.subText]}>注册账户</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
                 </View>
             </View>
         );
@@ -88,6 +125,11 @@ let pageStyles = {
     unInput: {
         borderTopLeftRadius: 2,
         borderTopRightRadius: 2,
+    },
+    middleInput: {
+        marginTop: -0.7,
+        borderTopWidth: 0.3,
+        borderTopColor: '#dcdcdc',
     },
     pwInput: {
         marginTop: -0.7,

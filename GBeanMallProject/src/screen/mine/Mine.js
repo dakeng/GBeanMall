@@ -38,7 +38,7 @@ export default class MineScreen extends Component{
     render(){
         return(
             <View>
-                <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp')}>
+                <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp',{signIn: true})}>
                     <View style={MineStyles.accountContainer}>
                         <View style={MineStyles.leftContainer}>
                             <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
