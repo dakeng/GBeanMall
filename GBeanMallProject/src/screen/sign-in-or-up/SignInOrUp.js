@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {Text, Image, View, TextInput, TouchableOpacity} from 'react-native';
 import {styles, deviceWidth, deviceHeight} from './../../common/modules/styles';
 
+import testHost from './../../cfg/const';
+import requestSignUp from './modules/request-sign-up';
+
 class Header extends Component {
     render(){
         return (
@@ -11,6 +14,16 @@ class Header extends Component {
 }
 
 export default class SignInOrUp extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            ensurePassword: '',
+            tip: '',
+        }
+    }
+
     static navigationOptions = ({navigation}) => {
        return {
             signIn: navigation.state.params.signIn,
@@ -36,13 +49,52 @@ export default class SignInOrUp extends Component {
         return defaultStyle;
     }
 
-    constructor(props){
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            ensurePassword: '',
+    showTip = msg => {
+        this.setState({
+            tip: msg,
+        })
+    }
+
+    check = (e, type) => {
+        console.log(e.nativeEvent.text);
+        const text = e.nativeEvent.text;
+        if(text.indexOf(' ') > -1){
+            
         }
+    }
+
+    signUp = () => {
+        if(this.state.password === this.state.ensurePassword){
+            let config = {
+                method: 'post',
+                url: `http://${testHost}/user`,
+                data: {
+                    operate: 0, //0：注册，1：登录
+                    user: {
+                        username: this.state.username,
+                        password: this.state.password,
+                    }
+                }
+            }
+            requestSignUp(config, showTip);
+        }else{
+            this.showTip('两次输入的密码不一致');
+        }
+    }
+
+    signIn = () => {
+        let config = {
+            method: 'post',
+            url: `http://${testHost}/user`,
+            data: {
+                operate: 1, //0：注册，1：登录
+                user: {
+                    username: this.state.username,
+                    password: this.state.password,
+                }
+            }
+        }
+        requestSignUp(config, showTip);
     }
 
     render(){
@@ -56,6 +108,7 @@ export default class SignInOrUp extends Component {
                         placeholderTextColor="#bcbcbc"
                         underlineColorAndroid={'transparent'}
                         onChangeText={text => this.setState({username: text})}
+                        onEndEditing={e => this.check(e)}
                     />
                     <TextInput
                         secureTextEntry={true}
@@ -77,12 +130,15 @@ export default class SignInOrUp extends Component {
                         />
                     }
                     {
+                        this.state.tip !== '' && <Text>{this.state.tip}</Text>
+                    }
+                    {
                         this.props.navigation.state.params.signIn ?
                         <TouchableOpacity
                             style={[pageStyles.btn, styles.verticalAlign]}>
                             <Text style={pageStyles.btnText}>登录</Text>
                         </TouchableOpacity> : 
-                        <TouchableOpacity style={[pageStyles.btn, styles.verticalAlign]}>
+                        <TouchableOpacity style={[pageStyles.btn, styles.verticalAlign]} onPress={e => this.signUp()}>
                             <Text style={pageStyles.btnText}>注册</Text>
                         </TouchableOpacity>
                     }

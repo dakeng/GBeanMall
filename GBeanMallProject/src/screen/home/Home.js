@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import {styles, deviceWidth} from './../../common/modules/styles';
 import Swiper from 'react-native-swiper';
+import testHost from './../../cfg/const';
 
 import request from './modules/request';
 import GoodInfoCard from './component/GoodInfoCard';
@@ -54,7 +55,7 @@ export default class HomeScreen extends Component{
     componentWillMount(){
         request({
             method: 'get',
-            url: 'http://192.168.0.5:4000/commodity'
+            url: `http://${testHost}/commodity`
         }, this.loadData);
     }
 
