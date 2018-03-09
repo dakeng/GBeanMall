@@ -38,7 +38,7 @@ export default class MineScreen extends Component{
     render(){
         return(
             <View>
-                <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp',{signIn: true})}>
+                <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp',{signIn: true})} style={MineStyles.touchContainer}>
                     <View style={MineStyles.accountContainer}>
                         <View style={MineStyles.leftContainer}>
                             <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
@@ -53,13 +53,15 @@ export default class MineScreen extends Component{
 }
 
 const MineStyles = StyleSheet.create({
+    touchContainer: {
+        marginTop: 8,
+    }, 
     accountContainer: {
         backgroundColor: '#fff',
         flexDirection: 'row',
         justifyContent: "space-between",
         alignItems: 'center',
         backgroundColor: '#fff',
-        marginTop: 8,
     },
     leftContainer: {
         flexDirection: 'row',

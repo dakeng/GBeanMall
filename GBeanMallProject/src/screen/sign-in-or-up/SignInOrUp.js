@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Text, Image, View, TextInput, TouchableOpacity} from 'react-native';
+import {Text, Image, View, TextInput, TouchableOpacity, ToastAndroid} from 'react-native';
 import {styles, deviceWidth, deviceHeight} from './../../common/modules/styles';
 
 import testHost from './../../cfg/const';
 import requestSignUp from './modules/request-sign-up';
+import toast from './../../common/modules/toast';
 
 class Header extends Component {
     render(){
@@ -20,7 +21,6 @@ export default class SignInOrUp extends Component {
             username: '',
             password: '',
             ensurePassword: '',
-            tip: '',
         }
     }
 
@@ -49,21 +49,24 @@ export default class SignInOrUp extends Component {
         return defaultStyle;
     }
 
-    showTip = msg => {
-        this.setState({
-            tip: msg,
-        })
-    }
-
-    check = (e, type) => {
-        console.log(e.nativeEvent.text);
-        const text = e.nativeEvent.text;
-        if(text.indexOf(' ') > -1){
-            
-        }
+    goBack = () => {
+        console.log(this.props.navigation);
+        this.props.navigation.goBack();
     }
 
     signUp = () => {
+        if(/[^A-za-z0-9_\u4E00-\u9FA5]/.test(this.state.username)){
+            toast('用户名仅支持中英文，数字和下划线，长度小于20');
+            return ;
+        }
+        if(this.state.password.length === 0){
+            toast('请输入密码');
+            return ;
+        }
+        if(this.state.password.length < 6){
+            toast('密码长度不可小于6');
+            return ;
+        }
         if(this.state.password === this.state.ensurePassword){
             let config = {
                 method: 'post',
@@ -76,9 +79,9 @@ export default class SignInOrUp extends Component {
                     }
                 }
             }
-            requestSignUp(config, showTip);
+            requestSignUp(config, this.goBack);
         }else{
-            this.showTip('两次输入的密码不一致');
+            toast('两次输入的密码不一致');
         }
     }
 
@@ -94,7 +97,7 @@ export default class SignInOrUp extends Component {
                 }
             }
         }
-        requestSignUp(config, showTip);
+        requestSignUp(config);
     }
 
     render(){
@@ -108,7 +111,7 @@ export default class SignInOrUp extends Component {
                         placeholderTextColor="#bcbcbc"
                         underlineColorAndroid={'transparent'}
                         onChangeText={text => this.setState({username: text})}
-                        onEndEditing={e => this.check(e)}
+                        maxLength={20}
                     />
                     <TextInput
                         secureTextEntry={true}
@@ -135,10 +138,15 @@ export default class SignInOrUp extends Component {
                     {
                         this.props.navigation.state.params.signIn ?
                         <TouchableOpacity
-                            style={[pageStyles.btn, styles.verticalAlign]}>
+                            style={[pageStyles.btn, styles.verticalAlign]}
+                            onPress={e => this.signIn()}    
+                        >
                             <Text style={pageStyles.btnText}>登录</Text>
                         </TouchableOpacity> : 
-                        <TouchableOpacity style={[pageStyles.btn, styles.verticalAlign]} onPress={e => this.signUp()}>
+                        <TouchableOpacity 
+                            style={[pageStyles.btn, styles.verticalAlign]} 
+                            onPress={e => this.signUp()}
+                        >
                             <Text style={pageStyles.btnText}>注册</Text>
                         </TouchableOpacity>
                     }
