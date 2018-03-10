@@ -81,7 +81,7 @@ const MineStyles = StyleSheet.create({
     },
     btnText: {
         color: '#434343',
-        fontSize: 18,
+        fontSize: 16,
     },
     enterIcon: {
         width: 22,
