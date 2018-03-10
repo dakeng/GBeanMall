@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import {Text, Image, View, TextInput, TouchableOpacity} from 'react-native';
+import {Text, Image, View, TextInput, TouchableOpacity, ToastAndroid} from 'react-native';
 import {styles, deviceWidth, deviceHeight} from './../../common/modules/styles';
+
+import testHost from './../../cfg/const';
+import requestSignUp from './modules/request-sign-up';
+import toast from './../../common/modules/toast';
 
 class Header extends Component {
     render(){
@@ -11,6 +15,15 @@ class Header extends Component {
 }
 
 export default class SignInOrUp extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            username: '',
+            password: '',
+            ensurePassword: '',
+        }
+    }
+
     static navigationOptions = ({navigation}) => {
        return {
             signIn: navigation.state.params.signIn,
@@ -36,13 +49,55 @@ export default class SignInOrUp extends Component {
         return defaultStyle;
     }
 
-    constructor(props){
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            ensurePassword: '',
+    goBack = () => {
+        console.log(this.props.navigation);
+        this.props.navigation.goBack();
+    }
+
+    signUp = () => {
+        if(/[^A-za-z0-9_\u4E00-\u9FA5]/.test(this.state.username)){
+            toast('用户名仅支持中英文，数字和下划线，长度小于20');
+            return ;
         }
+        if(this.state.password.length === 0){
+            toast('请输入密码');
+            return ;
+        }
+        if(this.state.password.length < 6){
+            toast('密码长度不可小于6');
+            return ;
+        }
+        if(this.state.password === this.state.ensurePassword){
+            let config = {
+                method: 'post',
+                url: `http://${testHost}/user`,
+                data: {
+                    operate: 0, //0：注册，1：登录
+                    user: {
+                        username: this.state.username,
+                        password: this.state.password,
+                    }
+                }
+            }
+            requestSignUp(config, this.goBack);
+        }else{
+            toast('两次输入的密码不一致');
+        }
+    }
+
+    signIn = () => {
+        let config = {
+            method: 'post',
+            url: `http://${testHost}/user`,
+            data: {
+                operate: 1, //0：注册，1：登录
+                user: {
+                    username: this.state.username,
+                    password: this.state.password,
+                }
+            }
+        }
+        requestSignUp(config);
     }
 
     render(){
@@ -56,6 +111,7 @@ export default class SignInOrUp extends Component {
                         placeholderTextColor="#bcbcbc"
                         underlineColorAndroid={'transparent'}
                         onChangeText={text => this.setState({username: text})}
+                        maxLength={20}
                     />
                     <TextInput
                         secureTextEntry={true}
@@ -77,12 +133,20 @@ export default class SignInOrUp extends Component {
                         />
                     }
                     {
+                        this.state.tip !== '' && <Text>{this.state.tip}</Text>
+                    }
+                    {
                         this.props.navigation.state.params.signIn ?
                         <TouchableOpacity
-                            style={[pageStyles.btn, styles.verticalAlign]}>
+                            style={[pageStyles.btn, styles.verticalAlign]}
+                            onPress={e => this.signIn()}    
+                        >
                             <Text style={pageStyles.btnText}>登录</Text>
                         </TouchableOpacity> : 
-                        <TouchableOpacity style={[pageStyles.btn, styles.verticalAlign]}>
+                        <TouchableOpacity 
+                            style={[pageStyles.btn, styles.verticalAlign]} 
+                            onPress={e => this.signUp()}
+                        >
                             <Text style={pageStyles.btnText}>注册</Text>
                         </TouchableOpacity>
                     }
