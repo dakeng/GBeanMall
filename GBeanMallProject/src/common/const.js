@@ -1,1 +1,0 @@
-export const localServerHost = '192.168.0.107:4000';
