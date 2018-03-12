@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {AsyncStorage} from 'react-native';
 import toast from './../../../common/modules/toast';
 
 const request = function(config, callback) {
@@ -10,6 +11,7 @@ const request = function(config, callback) {
             }else{
                 toast(res.data.data.msg);
                 if(res.data.status === 1){
+                    //await AsyncStorage.setItem()
                     callback && callback();
                 }
             }

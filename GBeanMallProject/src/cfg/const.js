@@ -1,3 +1,3 @@
-let testHost = '192.168.1.181:4000';
+let testHost = '127.0.0.1:4000';
 
 export default testHost;

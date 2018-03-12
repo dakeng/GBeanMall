@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Text, Image, Button, View, StyleSheet, TouchableHighlight} from 'react-native';
 import {styles, deviceWidth} from './../../common/modules/styles';
 
+import SignOut from './component/SignOut';
+
 class MineTitle extends Component {
     render() {
         return (
@@ -47,6 +49,7 @@ export default class MineScreen extends Component{
                         <Image source={require('./../../img/enter.png')} style={MineStyles.enterIcon}/>
                     </View>
                 </TouchableHighlight>
+                <SignOut />
             </View>
         );
     }
@@ -54,7 +57,7 @@ export default class MineScreen extends Component{
 
 const MineStyles = StyleSheet.create({
     touchContainer: {
-        marginTop: 8,
+        marginTop: 12,
     }, 
     accountContainer: {
         backgroundColor: '#fff',
