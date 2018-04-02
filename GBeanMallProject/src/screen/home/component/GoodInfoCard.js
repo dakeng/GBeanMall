@@ -8,8 +8,7 @@ export default class GoodInfoCard extends Component{
 
     render (){
         return (
-            <TouchableHighlight 
-                onPress={() => this.props.jumpPage(this.props.data.commodity_name)} 
+            <TouchableHighlight
                 style={{marginBottom: deviceWidth/10*0.16}}
             >
                 <View style={styles.container}>

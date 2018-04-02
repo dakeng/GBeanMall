@@ -10,15 +10,18 @@ import GoodInfoCard from './component/GoodInfoCard';
 const icon = [
     {
         source: require('./../../img/task.png'),
-        text: '任务'
+        text: '任务中心',
+        screen: 'TaskCentre'
     },
     {
         source: require('./../../img/game.png'),
-        text: '游戏'
+        text: '游戏中心',
+        screen: 'GameCentre'
     },
     {
         source: require('./../../img/search.png'),
-        text: '搜索'
+        text: '搜索',
+        screen: 'TaskCentre'
     }
 ];
 
@@ -62,8 +65,8 @@ export default class HomeScreen extends Component{
         });
     }
 
-    jumpPage = (_title) => {
-        this.props.navigation.navigate('CommodityDetail', {title: _title});
+    jumpPage = (screen, _title) => {
+        this.props.navigation.navigate(screen, {title: _title});
     }
 
     _onRefresh = () => {
@@ -133,10 +136,15 @@ export default class HomeScreen extends Component{
                             icon && icon.length > 0 &&
                             icon.map((item, index) => {
                                 return (
-                                    <View style={homeStyle.icon} key={index}>
-                                        <Image source={item.source} style={homeStyle.iconImg}/>
-                                        <Text style={homeStyle.iconText}>{item.text}</Text>
-                                    </View> 
+                                    <TouchableHighlight
+                                        onPress={() => this.jumpPage(item.screen, item.text)}
+                                        key={index}
+                                    >
+                                        <View style={homeStyle.icon} key={index}>
+                                            <Image source={item.source} style={homeStyle.iconImg}/>
+                                            <Text style={homeStyle.iconText}>{item.text}</Text>
+                                        </View> 
+                                    </TouchableHighlight>
                                 );
                             }) 
                         }

@@ -2,8 +2,10 @@ import React from 'react';
 import {StackNavigator,TabNavigator,TabBarBottom} from 'react-navigation';
 import Tab from './Tab';
 import CommodityDetail from './../screen/commodity-detail/CommodityDetail';
+import TaskCentre from './../screen/task-centre/TaskCentre';
+import GameCentre from './../screen/game-centre/GameCentre';
 import SignInOrUp from './../screen/sign-in-or-up/SignInOrUp';
-import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator'
+import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 
 const Main = StackNavigator(
     {
@@ -15,6 +17,18 @@ const Main = StackNavigator(
             navigationOptions: ({navigation}) => ({
                 title: navigation.state.params.title,
             }),
+        },
+        TaskCentre: {
+            screen: TaskCentre,
+            navigationOptions: ({navigation}) => ({
+                title: navigation.state.params.title
+            })
+        },
+        GameCentre: {
+            screen: GameCentre,
+            navigationOptions: ({navigation}) => ({
+                title: navigation.state.params.title
+            })
         },
         SignInOrUp: {
             screen: SignInOrUp,
