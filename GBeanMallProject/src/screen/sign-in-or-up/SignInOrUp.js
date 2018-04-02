@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Text, Image, View, TextInput, TouchableOpacity, ToastAndroid} from 'react-native';
+import {Text, Image, View, TextInput, TouchableOpacity, ToastAndroid, DeviceEventEmitter} from 'react-native';
 import {styles, deviceWidth, deviceHeight} from './../../common/modules/styles';
 
-import testHost from './../../cfg/const';
-import requestSignUp from './modules/request-sign-up';
+import utils from './../../common/modules/utils';
+import request from './modules/request-sign-up';
 import toast from './../../common/modules/toast';
 
 class Header extends Component {
@@ -21,6 +21,8 @@ export default class SignInOrUp extends Component {
             username: '',
             password: '',
             ensurePassword: '',
+            isLogin: false,
+            user: null,
         }
     }
 
@@ -52,6 +54,7 @@ export default class SignInOrUp extends Component {
     goBack = () => {
         console.log(this.props.navigation);
         this.props.navigation.goBack();
+        DeviceEventEmitter.emit('refresh');
     }
 
     signUp = () => {
@@ -68,36 +71,28 @@ export default class SignInOrUp extends Component {
             return ;
         }
         if(this.state.password === this.state.ensurePassword){
-            let config = {
-                method: 'post',
-                url: `http://${testHost}/user`,
-                data: {
-                    operate: 0, //0：注册，1：登录
-                    user: {
-                        username: this.state.username,
-                        password: this.state.password,
-                    }
+            let data = {
+                operate: 0, //0：注册，1：登录
+                user: {
+                    username: this.state.username,
+                    password: this.state.password,
                 }
             }
-            requestSignUp(config, this.goBack);
+            request(data, this.goBack);
         }else{
             toast('两次输入的密码不一致');
         }
     }
 
     signIn = () => {
-        let config = {
-            method: 'post',
-            url: `http://${testHost}/user`,
-            data: {
-                operate: 1, //0：注册，1：登录
-                user: {
-                    username: this.state.username,
-                    password: this.state.password,
-                }
+        let data = {
+            operate: 1, //0：注册，1：登录
+            user: {
+                username: this.state.username,
+                password: this.state.password,
             }
         }
-        requestSignUp(config);
+        request(data, this.goBack);
     }
 
     render(){

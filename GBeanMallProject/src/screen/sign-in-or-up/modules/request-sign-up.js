@@ -1,8 +1,21 @@
 import axios from 'axios';
-import {AsyncStorage} from 'react-native';
 import toast from './../../../common/modules/toast';
+import { AsyncStorage } from 'react-native';
 
-const request = function(config, callback) {
+import testHost from './../../../cfg/const';
+
+const request = function(data, callback) {
+    let postData = Object.assign(
+        {
+            tooken: tooken
+        },
+        data
+    )
+    let config = {
+        method: 'post',
+        url: `http://${testHost}/user`,
+        data: postData
+    }
     axios(config)
         .then(res => {
             console.log(res);
@@ -11,8 +24,19 @@ const request = function(config, callback) {
             }else{
                 toast(res.data.data.msg);
                 if(res.data.status === 1){
-                    //await AsyncStorage.setItem()
-                    callback && callback();
+                    console.log(res.data.data.tooken, res.data.data.userData)
+                    AsyncStorage.multiSet([['tooken', res.data.data.tooken], ['userData', JSON.stringify(res.data.data.userData)]],() => {
+                        global.tooken = res.data.data.tooken;
+                        console.log(tooken);
+                        callback && callback();
+                    })
+                    /* storage.save('tooken', res.data.data.tooken).then(() => {
+                        global.tooken = res.data.data.tooken;
+                        console.log(tooken);
+                    }); */
+                    /* storage.save('userData', res.data.data.userData).then(() => {
+                        console.log(userData);
+                    }); */
                 }
             }
         })

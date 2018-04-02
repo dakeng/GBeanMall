@@ -10,14 +10,10 @@ export default class SignOut extends Component{
     }
 
     signOut = () => {
-        let config = {
-            method: 'post',
-            url: `http://${testHost}/user`,
-            data: {
-                operate: 2, //0：注册，1：登录，2：退出登录
-            }
+        let data = {
+            operate: 2, //0：注册，1：登录，2：退出登录
         };
-        requestSignOut(config);
+        requestSignOut(data, this.props.refreshData);
     }
 
     render (){

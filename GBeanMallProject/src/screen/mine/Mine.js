@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Text, Image, Button, View, StyleSheet, TouchableHighlight} from 'react-native';
+import {Text, Image, Button, View, StyleSheet, TouchableHighlight, DeviceEventEmitter, AsyncStorage} from 'react-native';
 import {styles, deviceWidth} from './../../common/modules/styles';
 
 import SignOut from './component/SignOut';
+import utils from '../../common/modules/utils';
 
 class MineTitle extends Component {
     render() {
@@ -37,19 +38,79 @@ export default class MineScreen extends Component{
         headerTitle: <MineTitle/>
     };
 
+    constructor(props){
+        super(props);
+        this.state = {
+            isLogin: '',
+            userData: '',
+        }
+    }
+
+    refreshData = () => {
+        console.log('刷新')
+        AsyncStorage.getItem('userData', (err, result) => {
+            console.log(result);
+            if(err){
+                console.log(err);
+            }else{
+                this.setState({
+                    isLogin: utils.isLogin(),
+                    userData: JSON.parse(result)
+                },() => {
+                    console.log(this.state)
+                })
+            }
+        })
+        /* storage.get('userData').then(value => {
+            this.setState({
+                isLogin: utils.isLogin(),
+                userData: value
+            },() => {
+                console.log(this.state)
+            })
+        }).catch(err => {
+            console.log(err);
+        }); */
+    }
+
+    componentWillMount(){
+        this.refreshData();
+    }
+
+    componentDidMount(){
+        this.subscription = DeviceEventEmitter.addListener('refresh', this.refreshData)
+    }
+
+    componentWillUnmount(){
+        this.subscription.remove();
+    }
+
     render(){
         return(
             <View>
-                <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp',{signIn: true})} style={MineStyles.touchContainer}>
-                    <View style={MineStyles.accountContainer}>
-                        <View style={MineStyles.leftContainer}>
-                            <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
-                            <Text style={MineStyles.btnText}>登录/注册</Text>
+                {
+                    ! this.state.isLogin ? 
+                    <TouchableHighlight onPress={e => this.props.navigation.navigate('SignInOrUp',{signIn: true})} style={MineStyles.touchContainer}>
+                        <View style={MineStyles.accountContainer}>
+                            <View style={MineStyles.leftContainer}>
+                                <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
+                                <Text style={MineStyles.btnText}>登录/注册</Text>
+                            </View>
+                            <Image source={require('./../../img/enter.png')} style={MineStyles.enterIcon}/>
                         </View>
-                        <Image source={require('./../../img/enter.png')} style={MineStyles.enterIcon}/>
-                    </View>
-                </TouchableHighlight>
-                <SignOut />
+                    </TouchableHighlight>
+                    :
+                    <TouchableHighlight style={MineStyles.touchContainer}>
+                        <View style={MineStyles.accountContainer}>
+                            <View style={MineStyles.leftContainer}>
+                                <Image source={require('./../../img/head.png')} style={MineStyles.headPic}/>
+                                <Text style={MineStyles.btnText}>{this.state.userData && this.state.userData.username}</Text>
+                            </View>
+                            <Image source={require('./../../img/enter.png')} style={MineStyles.enterIcon}/>
+                        </View>
+                    </TouchableHighlight>
+                }
+                <SignOut refreshData={this.refreshData.bind(this)}/>
             </View>
         );
     }
