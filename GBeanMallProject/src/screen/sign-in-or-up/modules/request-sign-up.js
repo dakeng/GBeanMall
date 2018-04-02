@@ -7,7 +7,7 @@ import testHost from './../../../cfg/const';
 const request = function(data, callback) {
     let postData = Object.assign(
         {
-            tooken: tooken
+            token: token
         },
         data
     )
@@ -24,19 +24,12 @@ const request = function(data, callback) {
             }else{
                 toast(res.data.data.msg);
                 if(res.data.status === 1){
-                    console.log(res.data.data.tooken, res.data.data.userData)
-                    AsyncStorage.multiSet([['tooken', res.data.data.tooken], ['userData', JSON.stringify(res.data.data.userData)]],() => {
-                        global.tooken = res.data.data.tooken;
-                        console.log(tooken);
+                    console.log(res.data.data.token, res.data.data.userData)
+                    AsyncStorage.multiSet([['token', res.data.data.token], ['userData', JSON.stringify(res.data.data.userData)]],() => {
+                        global.token = res.data.data.token;
+                        console.log(token);
                         callback && callback();
-                    })
-                    /* storage.save('tooken', res.data.data.tooken).then(() => {
-                        global.tooken = res.data.data.tooken;
-                        console.log(tooken);
-                    }); */
-                    /* storage.save('userData', res.data.data.userData).then(() => {
-                        console.log(userData);
-                    }); */
+                    });
                 }
             }
         })

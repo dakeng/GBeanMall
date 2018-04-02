@@ -1,17 +1,10 @@
 import { AsyncStorage } from 'react-native';
-global.tooken = null;
+global.token = null;
 
-AsyncStorage.getItem('tooken', (err, result) => {
+AsyncStorage.getItem('token', (err, result) => {
     if(err){
         console.log(err);
     }else{
-        global.tooken = result;
+        global.token = result;
     }
 })
-
-/* storage.get('tooken').then(result => {
-    global.tooken = result;
-}).catch(err => {
-    global.tooken = null;
-    console.log(err);
-}) */

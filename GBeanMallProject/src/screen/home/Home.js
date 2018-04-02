@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, Image, Button, Alert, ScrollView, StyleSheet, StatusBar, Dimensions, RefreshControl, TouchableHighlight} from 'react-native';
 import {styles, deviceWidth} from './../../common/modules/styles';
 import Swiper from 'react-native-swiper';
 import testHost from './../../cfg/const';
@@ -13,14 +13,26 @@ const icon = [
         text: '任务'
     },
     {
-        source: require('./../../img/glodenBean.png'),
-        text: '金豆'
+        source: require('./../../img/game.png'),
+        text: '游戏'
     },
     {
         source: require('./../../img/search.png'),
         text: '搜索'
     }
 ];
+
+const banner = [
+    {
+        source: require('./../../img/1.png')
+    },
+    {
+        source: require('./../../img/2.png')
+    },
+    {
+        source: require('./../../img/4.jpg')
+    },
+]
 
 export default class HomeScreen extends Component{
     static navigationOptions = {
@@ -38,18 +50,30 @@ export default class HomeScreen extends Component{
         super(props);
         this.state = {
             visibleSwiper: false,
-            data: []
+            data: [],
+            isRefreshing: false
         }
     }
 
     loadData = (_data) => {
         this.setState({
-            data: _data
+            data: _data,
+            isRefreshing: false
         });
     }
 
     jumpPage = (_title) => {
         this.props.navigation.navigate('CommodityDetail', {title: _title});
+    }
+
+    _onRefresh = () => {
+        this.setState({
+            isRefreshing: true
+        })
+        request({
+            method: 'get',
+            url: `http://${testHost}/commodity`
+        }, this.loadData);
     }
 
     componentWillMount(){
@@ -70,20 +94,39 @@ export default class HomeScreen extends Component{
     render(){
         if(this.state.visibleSwiper){
             return(
-                <ScrollView style={styles.container}>
+                <ScrollView 
+                    style={styles.container}
+                    refreshControl={
+                        <RefreshControl
+                          refreshing={this.state.isRefreshing}
+                          onRefresh={this._onRefresh}
+                          tintColor="#fff"
+                          colors={['#fff']}
+                          progressBackgroundColor="#e94f37"
+                        />
+                      }
+                >
+                    <StatusBar
+                        backgroundColor="#e94f37"
+                        barStyle="light-content"
+                    />
                     <Swiper 
                         style={homeStyle.wrapper}
-                        autoplayTimeout={4}    
+                        autoplayTimeout={4}
+                        paginationStyle={homeStyle.paginationStyle}
+                        dot={<View style={{backgroundColor:'rgba(255, 255, 255, 0.2)', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}
+                        activeDot={<View style={{backgroundColor: 'rgb(233, 79, 55)', width: 6, height: 6, borderRadius: 3, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}
                     >
-                        <View style={[homeStyle.item, homeStyle.slide1]}>
-                            <Text style={homeStyle.text}>one</Text>
-                        </View>
-                        <View style={[homeStyle.item, homeStyle.slide2]}>
-                            <Text style={homeStyle.text}>two</Text>
-                        </View>
-                        <View style={[homeStyle.item, homeStyle.slide3]}>
-                            <Text style={homeStyle.text}>three</Text>
-                        </View>
+                        {
+                            banner && banner.length > 0 &&
+                            banner.map((item, index) => {
+                                return (
+                                    <TouchableHighlight style={homeStyle.item} key={index}>
+                                        <Image source={item.source} style={homeStyle.banner}/>
+                                    </TouchableHighlight>
+                                );
+                            })
+                        }
                     </Swiper>
                     <View style={homeStyle.iconContainer}>
                         {
@@ -127,16 +170,21 @@ export default class HomeScreen extends Component{
 const homeStyle = StyleSheet.create({
     wrapper: {
         width: deviceWidth,
-        height: 200
+        height: 200,
+        backgroundColor: '#fff',
+        
+    },
+    paginationStyle: {
+        bottom: 10,
     },
     iconContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#FFF',
+        backgroundColor: '#fff',
     },
     icon: {
-        width: deviceWidth/8,
-        height: deviceWidth/6,
+        width: deviceWidth/4,
+        height: deviceWidth/5,
         flexDirection: 'column',
         justifyContent: 'center',
         alignContent: 'center',
@@ -144,15 +192,21 @@ const homeStyle = StyleSheet.create({
     },
     iconText: {
         fontSize: 12,
+        color: '#434343',
     },
     iconImg: {
-        width: deviceWidth/12,
-        height: deviceWidth/12,
+        width: deviceWidth/10,
+        height: deviceWidth/10,
     },
     item: {
         height: 200,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    banner: {
+        maxWidth: deviceWidth,
+        maxHeight: 200,
+        resizeMode: 'cover',
     },
     slide1: {
         backgroundColor: '#9DD6EB',

@@ -26,7 +26,7 @@ const Tab = TabNavigator(
         animationEnabled: true,
         lazyLoad: true,
         tabBarOptions: {
-            activeTintColor: '#1296db',
+            activeTintColor: '#e94f37',
             activeBackgroundColor: '#fff',
             inactiveTintColor: '#333',
             inactiveBackgroundColor: '#fff',
