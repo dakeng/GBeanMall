@@ -5,16 +5,10 @@ import { AsyncStorage } from 'react-native';
 import testHost from './../../../cfg/const';
 
 const request = function(data, callback) {
-    let postData = Object.assign(
-        {
-            token: token
-        },
-        data
-    )
     let config = {
         method: 'post',
         url: `http://${testHost}/user`,
-        data: postData
+        data: data
     }
     axios(config)
         .then(res => {

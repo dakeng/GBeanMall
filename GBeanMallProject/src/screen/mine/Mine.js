@@ -61,16 +61,6 @@ export default class MineScreen extends Component{
                 })
             }
         })
-        /* storage.get('userData').then(value => {
-            this.setState({
-                isLogin: utils.isLogin(),
-                userData: value
-            },() => {
-                console.log(this.state)
-            })
-        }).catch(err => {
-            console.log(err);
-        }); */
     }
 
     componentWillMount(){
