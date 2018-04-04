@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableHighlight} from 'react-native';
+import {View, Text, TouchableHighlight, DeviceEventEmitter} from 'react-native';
 import testHost from './../../../cfg/const';
 
 import requestSignOut from  './../../sign-in-or-up/modules/request-sign-up';
@@ -14,6 +14,7 @@ export default class SignOut extends Component{
             operate: 2, //0：注册，1：登录，2：退出登录
         };
         requestSignOut(data, this.props.refreshData);
+        DeviceEventEmitter.emit('refreshCart');
     }
 
     render (){

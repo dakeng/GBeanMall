@@ -21,7 +21,7 @@ const request = function(data, callback) {
                     console.log(res.data.data.token, res.data.data.userData)
                     AsyncStorage.multiSet([['token', res.data.data.token], ['userData', JSON.stringify(res.data.data.userData)]],() => {
                         global.token = res.data.data.token;
-                        console.log(token);
+                        //console.log(token);
                         callback && callback();
                     });
                 }

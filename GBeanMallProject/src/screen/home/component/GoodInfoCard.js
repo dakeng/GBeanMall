@@ -1,9 +1,17 @@
 import React, {Component} from 'react';
-import {View, Image, Text, Dimensions, TouchableHighlight} from 'react-native';
+import {View, Image, Text, Dimensions, TouchableHighlight, DeviceEventEmitter} from 'react-native';
+import request from './../../cart/modules/request';
 
 export default class GoodInfoCard extends Component{
     constructor(props){
         super(props);
+    }
+
+    add = (id) => {
+        request('POST', {
+            operate: 1,
+            commodity_id: id,
+        }, () => {DeviceEventEmitter.emit('refreshCart')});
     }
 
     render (){
@@ -16,7 +24,9 @@ export default class GoodInfoCard extends Component{
                     <Text style={styles.title}>{this.props.data.commodity_name}</Text>
                     <View style={styles.info}>
                         <Text style={styles.des}><Text style={styles.unit}>￥</Text>{this.props.data.commodity_price}</Text>
-                        <TouchableHighlight>
+                        <TouchableHighlight
+                            onPress={() => this.add(this.props.data._id)}
+                        >
                             <Image source={require('./../../../img/add.png')} style={styles.addIcon}/>
                         </TouchableHighlight>
                     </View>

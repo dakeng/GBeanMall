@@ -11,16 +11,14 @@ const request = function(method, data, callback) {
     if(method === 'POST'){
         config.data = data;
     }
+    console.log(config);
     axios(config)
         .then(res => {
             console.log(res);
             if(res.status > 400){
                 throw new Error('Bad response from server');
             }else{
-                toast(res.data.data.msg);
-                /* if(res.data.status === 1){
-                    console.log(res.data.data);
-                } */
+                //toast(res.data.data.msg);
                 callback && callback(res.data.data.commoditys);
             }
         })
