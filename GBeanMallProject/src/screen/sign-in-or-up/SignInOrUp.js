@@ -52,7 +52,7 @@ export default class SignInOrUp extends Component {
     }
 
     goBack = () => {
-        //console.log(this.props.navigation);
+        console.log(this.props.navigation);
         this.props.navigation.goBack();
         DeviceEventEmitter.emit('refresh');
         DeviceEventEmitter.emit('refreshCart');

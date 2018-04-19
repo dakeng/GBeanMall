@@ -5,6 +5,8 @@ import CommodityDetail from './../screen/commodity-detail/CommodityDetail';
 import TaskCentre from './../screen/task-centre/TaskCentre';
 import GameCentre from './../screen/game-centre/GameCentre';
 import SignInOrUp from './../screen/sign-in-or-up/SignInOrUp';
+import Order from './../screen/order/Order';
+import MyOrder from './../screen/order/MyOrder';
 import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
 
 const Main = StackNavigator(
@@ -34,6 +36,14 @@ const Main = StackNavigator(
             screen: SignInOrUp,
             navigationOptions: SignInOrUp.navigationOptions,
         },
+        Order: {
+            screen: Order,
+            navigationOptions: Order.navigationOptions,
+        },
+        MyOrder: {
+            screen: MyOrder,
+            navigationOptions: MyOrder.navigationOptions,
+        }
     },
     {
         transitionConfig: () => ({

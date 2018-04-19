@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, Image, Button, StyleSheet, ScrollView, RefreshControl, TouchableHighlight, DeviceEventEmitter} from 'react-native';
-import {styles, deviceWidth} from './../../common/modules/styles';
+import {styles, deviceWidth, deviceHeight} from './../../common/modules/styles';
 import utils from './../../common/modules/utils';
 import request from './modules/request';
 import testHost from './../../cfg/const';
+import toast from './../../common/modules/toast';
 
 class CartTitle extends Component {
     render() {
@@ -84,6 +85,29 @@ export default class CartScreen extends Component{
         })
     }
 
+    //购物车合计
+    sum = () => {
+        let sum = 0;
+        for(let i = 0; i < this.state.selectedIndex.length; i++){
+            sum += this.state.commoditys[this.state.selectedIndex[i]].commodity_price;
+        }
+        return sum;
+    }
+
+    //去结算
+    toCreateOrder = () => {
+        if(this.state.selectedIndex.length == 0){
+            toast('您未选中要购买的商品')
+            return;
+        }
+        let selectCommoditys = [];
+        for(let i = 0; i < this.state.selectedIndex.length; i++){
+            selectCommoditys.push(this.state.commoditys[this.state.selectedIndex[i]]);
+        }
+        console.log(selectCommoditys);
+        this.props.navigation.navigate('Order', {commoditys: selectCommoditys});
+    }
+
     delete = (id) => {
         request('POST', {
             operate: 2,
@@ -105,10 +129,9 @@ export default class CartScreen extends Component{
     }
 
     render(){
-        //console.log(this.state.commoditys);
         let commoditys = this.state.commoditys;
         return(
-            <ScrollView style={CartStyles.container}
+            <ScrollView
                 refreshControl={
                     <RefreshControl
                     refreshing={this.state.isRefreshing}
@@ -122,34 +145,46 @@ export default class CartScreen extends Component{
                 {
                     ! utils.isLogin() ? <Text style={[CartStyles.textCenter, CartStyles.text]}>请先登录~</Text> : 
                         commoditys.length === 0 ? <Text style={[CartStyles.textCenter, CartStyles.text]}>您的购物车空空如也~</Text> : 
-                            commoditys.map((item, index) => {
-                                return (
-                                    <View key={index} style={CartStyles.goodContainer}>
-                                            <TouchableHighlight
-                                                onPress={() => this.select(index)}
-                                            >
-                                                {
-                                                    this.state.selectedIndex.indexOf(index) > -1 ? 
-                                                    <Image source={require('./../../img/selected.png')} style={CartStyles.selectIcon}/> : 
-                                                    <Image source={require('./../../img/unselected.png')} style={CartStyles.selectIcon}/>
-                                                }
-                                            </TouchableHighlight>
-                                        <Image source={{uri: item.commodity_imgs[0]}} style={CartStyles.img}/>
-                                        <View style={CartStyles.info}>
-                                            <Text>{item.commodity_name}</Text>
-                                            <Text style={CartStyles.price}>{item.commodity_price}</Text>
-                                        </View>
-                                        <TouchableHighlight
-                                            style={{position: 'absolute',
-                                            top: 8,
-                                            right: 8,}}
-                                            onPress={() => this.delete(item._id)}
-                                        >
-                                            <Image style={CartStyles.deleteIcon} source={require('./../../img/delete.png')}/>
-                                        </TouchableHighlight>
-                                    </View>
-                                );
-                            })
+                            <View style={CartStyles.container}>
+                                <ScrollView style={CartStyles.middleContainer}>
+                                {
+                                    commoditys.map((item, index) => {
+                                        return (
+                                            <View key={index} style={CartStyles.goodContainer}>
+                                                    <TouchableHighlight
+                                                        onPress={() => this.select(index)}
+                                                    >
+                                                        {
+                                                            this.state.selectedIndex.indexOf(index) > -1 ? 
+                                                            <Image source={require('./../../img/selected.png')} style={CartStyles.selectIcon}/> : 
+                                                            <Image source={require('./../../img/unselected.png')} style={CartStyles.selectIcon}/>
+                                                        }
+                                                    </TouchableHighlight>
+                                                <Image source={{uri: item.commodity_imgs[0]}} style={CartStyles.img}/>
+                                                <View style={CartStyles.info}>
+                                                    <Text>{item.commodity_name}</Text>
+                                                    <Text style={CartStyles.price}>￥{item.commodity_price}</Text>
+                                                </View>
+                                                <TouchableHighlight
+                                                    style={{position: 'absolute',
+                                                    top: 8,
+                                                    right: 8,}}
+                                                    onPress={() => this.delete(item._id)}
+                                                >
+                                                    <Image style={CartStyles.deleteIcon} source={require('./../../img/delete.png')}/>
+                                                </TouchableHighlight>
+                                            </View>
+                                        );
+                                    })
+                                }
+                                </ScrollView>
+                                <View style={CartStyles.acountContainer}>
+                                    <Text style={CartStyles.amount}>合计：￥{this.sum()}</Text>
+                                    <TouchableHighlight style={CartStyles.accountBtn} onPress={this.toCreateOrder}>
+                                        <Text style={{color: '#fff', fontSize: 18, lineHeight: 48, textAlign: 'center'}}>去结算</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View>    
                 }
             </ScrollView>
         )
@@ -158,7 +193,11 @@ export default class CartScreen extends Component{
 
 const CartStyles = StyleSheet.create({
     container: {
-        
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    middleContainer: {
+        flex: 1,
     },
     goodContainer: {
         backgroundColor: '#fff',
@@ -179,11 +218,9 @@ const CartStyles = StyleSheet.create({
         height: deviceWidth/4,
     },
     info: {
-        margin: 10,
-        marginLeft: 0,
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignSelf: 'flex-start',
+        height: deviceWidth/4,
+        alignContent: 'space-between',
     },
     bottomContainer: {
         flexDirection: 'row',
@@ -191,7 +228,6 @@ const CartStyles = StyleSheet.create({
     },
     price: {
         fontSize: 14,
-        marginTop: 10,
         color: '#e94f37',
         alignSelf: 'flex-end',
     },
@@ -210,4 +246,21 @@ const CartStyles = StyleSheet.create({
         backgroundColor: '#dedede',
         height: 1,
     },
+    acountContainer: {
+        marginTop: 8,
+        height: 48,
+        width: deviceWidth,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#fff',
+    },
+    amount: {
+        fontSize: 18,
+        padding: 10,
+    },
+    accountBtn: {
+        width: 72,
+        height: 48,
+        backgroundColor: '#e94f37',
+    }
 });
