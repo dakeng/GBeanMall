@@ -4,11 +4,10 @@ import { AsyncStorage } from 'react-native';
 
 import testHost from './../../../cfg/const';
 
-const requestGetOrder = function(callback) {
-    let config = {
-        method: 'get',
-        url: `http://${testHost}/order`,
-    }
+const requestGetOrder = function(config, callback) {
+    config = Object.assign({
+        url: `http://${testHost}/task`,
+    }, config);
     axios(config)
         .then(res => {
             console.log(res);

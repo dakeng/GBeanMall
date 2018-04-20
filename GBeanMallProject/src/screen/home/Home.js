@@ -21,7 +21,7 @@ const icon = [
     {
         source: require('./../../img/search.png'),
         text: '搜索',
-        screen: 'TaskCentre'
+        screen: ''
     }
 ];
 

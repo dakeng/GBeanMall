@@ -22,15 +22,11 @@ const Main = StackNavigator(
         },
         TaskCentre: {
             screen: TaskCentre,
-            navigationOptions: ({navigation}) => ({
-                title: navigation.state.params.title
-            })
+            navigationOptions: TaskCentre.navigationOptions
         },
         GameCentre: {
             screen: GameCentre,
-            navigationOptions: ({navigation}) => ({
-                title: navigation.state.params.title
-            })
+            navigationOptions: GameCentre.navigationOptions
         },
         SignInOrUp: {
             screen: SignInOrUp,
